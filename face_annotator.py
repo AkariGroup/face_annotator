@@ -75,7 +75,7 @@ def main() -> None:
     for file in files:
         file_name = Path(file).stem
         try:
-            file_num = int(file_name)
+            file_num = int(file_name.split('_')[-1])
             if file_num >= save_num:
                 save_num = file_num + 1
         except BaseException:
@@ -106,7 +106,7 @@ def main() -> None:
                         if detection.spatialCoordinates.z < closest_face_distance:
                             closest_face_distance = detection.spatialCoordinates.z
                             closest_face_num = num
-                name = str(save_num).zfill(3)
+                name = f"{args.name}_{str(save_num).zfill(3)}"
                 print(f"closest_face_num: {closest_face_num}")
                 save_face_frame(
                     raw_frame,
