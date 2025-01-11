@@ -16,22 +16,12 @@ save_num: int = 0
 
 
 def detection_to_annotation(
-    frame: np.ndarray, detection: Any, id: int, oakd_spatial_yolo: OakdSpatialYolo
-) -> str:
+    frame: np.ndarray, detection: Any, id: int) -> str:
     annotation_text = ""
-    bbox = oakd_spatial_yolo.frame_norm(
-        frame,
-        (
-            detection.xmin,
-            detection.ymin,
-            detection.xmax,
-            detection.ymax,
-        ),
-    )
-    x1 = bbox[0]
-    x2 = bbox[2]
-    y1 = bbox[1]
-    y2 = bbox[3]
+    x1 = detection.xmin
+    x2 = detection.xmax
+    y1 = detection.ymin
+    y2 = detection.ymax
     center_x: float = (x1 + x2) / 2
     center_y: float = (y1 + y2) / 2
     width: float = x2 - x1
@@ -46,13 +36,12 @@ def save_face_frame(
     path: str,
     name: str,
     id: int,
-    oakd_spatial_yolo: OakdSpatialYolo,
 ) -> bool:
     global save_num
     save_path: str = path + "/" + name
     image_path = save_path + ".jpg"
     cv2.imwrite(image_path, image)
-    annotation: str = detection_to_annotation(image, detection, id, oakd_spatial_yolo)
+    annotation: str = detection_to_annotation(image, detection, id)
     annotation_path = save_path + ".txt"
     with open(annotation_path, "w") as file:
         file.write(annotation)
@@ -125,7 +114,6 @@ def main() -> None:
                     path=path,
                     name=name,
                     id=args.id,
-                    oakd_spatial_yolo=oakd_spatial_yolo,
                 )
                 save_num += 1
         key = cv2.waitKey(10)
