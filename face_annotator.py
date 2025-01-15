@@ -69,6 +69,10 @@ def main() -> None:
         model_path,
         "https://github.com/AkariGroup/akari_yolo_models/raw/main/human_parts/human_parts.blob",
     )
+    download_file(
+        config_path,
+        "https://github.com/AkariGroup/akari_yolo_models/raw/main/human_parts/human_parts.json"
+    )
     path = f"data/{args.name}/"
     os.makedirs(path, exist_ok=True)
     files = glob.glob(path + "/*")
